@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright (c) 2025 Fragoler
+# License: MIT
+# https://github.com/Fragoler/happy-new-year/blob/main/LICENSE
 
 # Initialize color variables
 color() {
@@ -254,7 +257,7 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
       sleep 1
     msg_ok "Ёлка готова!"
       sleep 1
-      
+
     show_tree
     
     if [ $# -ge 2 ]; then

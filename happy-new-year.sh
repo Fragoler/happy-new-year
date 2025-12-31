@@ -26,9 +26,8 @@ catch_errors() {
 
 # Error handler
 error_handler() {
-  if [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null; then 
-    kill $SPINNER_PID > /dev/null
-  fi
+  kill_spinner
+
   printf "\e[?25h"
   local exit_code="$?"
   local line_number="$1"
@@ -204,10 +203,11 @@ show_roll() {
 
 # Spinner control
 kill_spinner() {
-    [[ -v SPINNER_PID ]] && [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null 2>&1 && {
+    if [[ -v SPINNER_PID ]] && [ -n "$SPINNER_PID" ] && ps -p $SPINNER_PID > /dev/null 2>&1; then
         kill $SPINNER_PID > /dev/null 2>&1
         wait $SPINNER_PID 2>/dev/null || true
-    }
+        SPINNER_PID=""
+    fi
     printf "\r\e[K\e[?25h"
 }
 
@@ -242,7 +242,7 @@ msg_error() {
 # Main
 tput civis
 color
-catch_errors  
+catch_errors
 
 clear
 read -r -p "Готовы отпраздновать? <y/N> " prompt
@@ -260,7 +260,7 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 
     show_tree
     
-    center_text "${RD}""С НОВЫМ ГОДОМ!""${CL}"
+    center_text "${RD}С НОВЫМ ГОДОМ!${CL}"
     echo -e "\n\n" 
 
     if [ $# -ge 2 ]; then
@@ -272,9 +272,11 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 
         clear
         msg_info "*Открываем конверт*"
-        sleep 1
+          sleep 1
+        msg_ok "Готово!" 
+          sleep 0.5
+        
         clear
-
         show_roll "$MSG"
         center_text "${RD}[Ent] Сжечь бумажку${CL}"
     fi

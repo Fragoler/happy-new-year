@@ -164,7 +164,7 @@ EOF
       done <<< "${toys[$toy_idx]}"
   done
   
-  tput cup $((13 + ${#tree_lines[@]})) 0
+  tput cup $((10 + ${#tree_lines[@]})) 0
   tput sgr0
   echo
 }
@@ -242,7 +242,7 @@ msg_error() {
 # Main
 tput civis
 color
-catch_errors
+catch_errors  
 
 clear
 read -r -p "Готовы отпраздновать? <y/N> " prompt
@@ -251,7 +251,7 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
     clear
     msg_info "*ищем ёлочку*"
       sleep 1
-    msg_info "*звуки топора*"
+    msg_info "*стук топора*"
       sleep 1
     msg_info "*звон шариков*"
       sleep 1
@@ -260,6 +260,9 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 
     show_tree
     
+    center_text "${RD}""С НОВЫМ ГОДОМ!""${CL}"
+    echo -e "\n\n" 
+
     if [ $# -ge 2 ]; then
         MSG="$(echo "$1" | base64 -d)"
         NAME="$(echo "$2" | base64 -d)"
